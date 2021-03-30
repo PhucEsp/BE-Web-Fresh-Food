@@ -13,12 +13,40 @@ module.exports = {
             res.json(response)
         })
     },
+    
     detail: (req, res) => {
         let sql = 'SELECT * FROM DANGNHAP WHERE ID = ?'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json(response[0])
         })
+    },
+    login:(req,res)=>{
+        try{
+            let data = req.body;
+            let sql =' SELECT * FROM DANGNHAP WHERE ID=?';
+            db.query(sql,[req.body.ID],(err,res)=>{
+                let user = res[0];
+                if(user){
+                    const validPass = bcrypt.compareSync(data.MATKHAU, user.MATKHAU)
+                    if(validPass){
+                        res.json('Valid');
+                        return true;
+                    }
+                    else{
+                        res.json('Wrong Password');
+                        return false;
+                    }
+                }
+                else{
+                    res.json('ID not found');
+                    return false;
+                }
+            })
+        }
+        catch(err){
+            res.status(400).send('Connect to Server FAILED');
+        }
     },
     update: (req, res) => {
         let data = req.body;

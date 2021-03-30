@@ -53,7 +53,8 @@ module.exports = function(app) {
     //Đăng nhập
   app.route('/dangnhap')
     .get(dangnhap.get)
-    .post(dangnhap.store);
+    .post(dangnhap.store)
+    .post(dangnhap.login);
 
   app.route('/dangnhap/:id')
     .get(dangnhap.detail)
