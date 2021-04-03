@@ -54,13 +54,16 @@ module.exports = function(app) {
   app.route('/dangnhap')
     .get(dangnhap.get)
     .post(dangnhap.store)
-    .post(dangnhap.login);
-
+  
   app.route('/dangnhap/:id')
     .get(dangnhap.detail)
     .put(dangnhap.update)
     .delete(dangnhap.delete);
   
+  app.route('/dangnhap/khachhang')
+    .post(dangnhap.loginKH);
+  app.route('/dangnhap/nhanvien')
+    .post(dangnhap.loginNV);
   
     //Đánh Giá
   app.route('/danhgia')
@@ -119,13 +122,13 @@ module.exports = function(app) {
 
     //Nhân Viên
   app.route('/nhanvien')
-  .get(nhanvien.get)
-  .post(nhanvien.store);
+    .get(nhanvien.get)
+    .post(nhanvien.store);
 
   app.route('/nhanvien/:id')
-  .get(nhanvien.detail)
-  .put(nhanvien.update)
-  .delete(nhanvien.delete);
+    .get(nhanvien.detail)
+    .put(nhanvien.update)
+    .delete(nhanvien.delete);
 
   
     //Quyền
