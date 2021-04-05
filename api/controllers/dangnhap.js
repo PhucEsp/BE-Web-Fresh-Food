@@ -103,49 +103,69 @@ module.exports = {
         let data = {
             TAIKHOAN: req.body.TAIKHOAN,
             MATKHAU: req.body.MATKHAU,
+            MAQUYEN: req.body.MAQUYEN
         }
         // let data = req.body;
         const TAIKHOAN = data.TAIKHOAN;
         const MATKHAU = data.MATKHAU;
         let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
-        let sql = 'INSERT INTO DANGNHAP SET ?'
         // check Username
+        
+        let sql =' SELECT TAIKHOAN FROM DANGNHAP WHERE TAIKHOAN=?';
+        // try{
+        //     db.query(sql,[TAIKHOAN],(err,response)=>{
+        //         if (err) throw err
+        //         let tk = response[0];
+        //     if(tk.TAIKHOAN===TAIKHOAN){
+        //             res.json({
+        //                 message: 'TAIKHOAN existed'
+        //             });
+        //             return;
+        //         }
+        //     });
+        // }catch(err){
+        //     res.json({
+        //         message: 'TAIKHOAN existed1111111111'
+        //     });
+        // }
+        
+        sql = 'INSERT INTO DANGNHAP SET ?'
+        
         if( TAIKHOAN.length < 6){
-            return res.json({
+            res.json({
                 message: 'TAIKHOAN must be required at least 6 characters'
             });
         }
         if(RegExp.test(TAIKHOAN)){
-            return res.json({
+            res.json({
                 message: 'Invalid TAIKHOAN! only accept alphabet, number and underscore'
             });
         }
         // check password
         if(MATKHAU.length < 6){
-            return res.json({
-                message: 'MATKHAU must be required at least 6 characters'
-            });
+            res.json({message:'MATKHAU must be required at least 6 characters'
+        });
         }
         // check done ^^
         try {
             const DANGNHAP = {
                 TAIKHOAN: data.TAIKHOAN,
                 MATKHAU: bcrypt.hashSync(data.MATKHAU,10),
-                MAQUYEN: 2
+                MAQUYEN: data.MAQUYEN
             }
             db.query(sql, [DANGNHAP], (err, response) => {
                 if (err) throw err
-                res.json({message: 'Insert success!'})
+                res.json(DANGNHAP)
             })
         } catch (error) {
-            error.message;
+            res.json(error.message);
         }
     },
     delete: (req, res) => {
         let sql = 'DELETE FROM DANGNHAP WHERE TAIKHOAN = ?'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
-            res.json({message: 'Delete success!'})
+            res.json("delete success")
         })
     }
 }

@@ -52,8 +52,8 @@ module.exports = function(app) {
 
     //Đăng nhập
   app.route('/dangnhap')
-    .get(dangnhap.get)
-    .post(dangnhap.store)
+    .get(dangnhap.get)//trả về tất cả các dòng trong table dangnhap
+    .post(dangnhap.store)//
   
   app.route('/dangnhap/:id')
     .get(dangnhap.detail)

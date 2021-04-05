@@ -32,6 +32,39 @@ module.exports = {
             HOTEN :req.body.HOTEN,
             DIACHI :req.body.DIACHI
         }
+
+        const TAIKHOAN = data.TAIKHOAN;
+        const MATKHAU = data.MATKHAU;
+        const HOTEN = data1.HOTEN;
+        const DIACHI = data1.DIACHI;
+        const MAQUYEN = data.MAQUYEN;
+        let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
+        
+                
+        
+        // check Username
+        if( TAIKHOAN.length < 6){
+            return res.json({
+                message: 'TAIKHOAN must be required at least 6 characters'
+            });
+        }
+        if(RegExp.test(TAIKHOAN)){
+            return res.json({
+                message: 'Invalid TAIKHOAN! only accept alphabet, number and underscore'
+            });
+        }
+        // check password
+        if(MATKHAU.length < 6){
+            return res.json({
+                message: 'MATKHAU must be required at least 6 characters'
+            });
+        }
+        if(!HOTEN){
+            return res.json({
+                message: 'HOTEN is NOT NULL'
+            });
+        }
+
         let tk = req.params.id;
         //update DangNhap
         let sql = 'UPDATE DANGNHAP SET ? WHERE TAIKHOAN = ?';
@@ -42,7 +75,7 @@ module.exports = {
         sql = 'UPDATE NHANVIEN SET ? WHERE TAIKHOAN = ?';
         db.query(sql, [data1, tk], (err, response) => {
             if (err) throw err
-            res.json({message: 'Update Nhanvien success!'})
+            res.json()
         })
     },
     store: (req, res) => {
@@ -108,8 +141,7 @@ module.exports = {
             }
             db.query(sql, [NHANVIEN], (err, response) => {
                 if (err) throw err
-                res.json({message: 'Insert NHANVIEN success!'});
-                return;
+                res.json(data);
             })
         } catch (error) {
             error.message;

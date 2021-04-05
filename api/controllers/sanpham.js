@@ -22,11 +22,10 @@ module.exports = {
     },
     update: (req, res) => {
         let data = req.body;
-        let productId = req.params.productId;
         let sql = 'UPDATE SANPHAM SET ? WHERE ID = ?'
-        db.query(sql, [data, id], (err, response) => {
+        db.query(sql, [data, data.ID], (err, response) => {
             if (err) throw err
-            res.json({message: 'Update success!'})
+            res.json(data)
         })
     },
     store: (req, res) => {
@@ -34,7 +33,7 @@ module.exports = {
         let sql = 'INSERT INTO SANPHAM SET ?'
         db.query(sql, [data], (err, response) => {
             if (err) throw err
-            res.json({message: 'Insert success!'})
+            res.json(data)
         })
     },
     delete: (req, res) => {
