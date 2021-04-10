@@ -96,7 +96,7 @@ module.exports = {
         let sql = 'UPDATE DANGNHAP SET ? WHERE TAIKHOAN = ?'
         db.query(sql, [data, tk], (err, response) => {
             if (err) throw err
-            res.json({message: 'Update success!'})
+            res.json(data)
         })
     },
     store: (req, res) => {
@@ -108,28 +108,8 @@ module.exports = {
         // let data = req.body;
         const TAIKHOAN = data.TAIKHOAN;
         const MATKHAU = data.MATKHAU;
-        let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
-        // check Username
-        
-        let sql =' SELECT TAIKHOAN FROM DANGNHAP WHERE TAIKHOAN=?';
-        // try{
-        //     db.query(sql,[TAIKHOAN],(err,response)=>{
-        //         if (err) throw err
-        //         let tk = response[0];
-        //     if(tk.TAIKHOAN===TAIKHOAN){
-        //             res.json({
-        //                 message: 'TAIKHOAN existed'
-        //             });
-        //             return;
-        //         }
-        //     });
-        // }catch(err){
-        //     res.json({
-        //         message: 'TAIKHOAN existed1111111111'
-        //     });
-        // }
-        
-        sql = 'INSERT INTO DANGNHAP SET ?'
+        let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;      
+        let sql = 'INSERT INTO DANGNHAP SET ?'
         
         if( TAIKHOAN.length < 6){
             res.json({

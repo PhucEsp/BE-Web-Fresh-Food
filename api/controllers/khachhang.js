@@ -15,7 +15,7 @@ module.exports = {
         })
     },
     detail: (req, res) => {
-        let sql = 'SELECT * FROM KHACHHANG WHERE TAIKHOAN = ?'
+        let sql = 'SELECT * FROM KHACHHANG WHERE MAKH = ?'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json(response[0])
@@ -23,44 +23,34 @@ module.exports = {
     },
     update: (req, res) => {
         let data = {
-            TAIKHOAN: req.body.TAIKHOAN,
-            MATKHAU: bcrypt.hashSync(req.body.MATKHAU,10),
-            MAQUYEN: req.body.MAQUYEN
-        }
-        let data1 = {
-            TAIKHOAN: req.body.TAIKHOAN,
+            MAKH: req.body.MAKH,
             HOTEN :req.body.HOTEN,
             SDT: req.body.SDT,
             MAIL :req.body.MAIL,
-            DIACHI :req.body.DIACHI
+            DIACHI :req.body.DIACHI,
+            TAIKHOAN: req.body.TAIKHOAN
         }
         let tk = req.params.id;
 
+        const MAKH = data.MAKH;
+        const HOTEN = data.HOTEN;
+        const DIACHI = data.DIACHI;
+        const SDT = data.SDT;
+        const MAIL = data.MAIL;
         const TAIKHOAN = data.TAIKHOAN;
-        const MATKHAU = data.MATKHAU;
-        const HOTEN = data1.HOTEN;
-        const DIACHI = data1.DIACHI;
-        const SDT = data1.SDT;
-        const MAIL = data1.MAIL;
-        const MAQUYEN = data.MAQUYEN;
         let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
         // check Username
-        if( TAIKHOAN.length < 6){
+        if( MAKH.length < 6){
             return res.json({
-                message: 'TAIKHOAN must be required at least 6 characters'
+                message: 'MAKH must be required at least 6 characters'
             });
         }
-        if(RegExp.test(TAIKHOAN)){
+        if(RegExp.test(MAKH)){
             return res.json({
-                message: 'Invalid TAIKHOAN! only accept alphabet, number and underscore'
+                message: 'Invalid MAKH! only accept alphabet, number and underscore'
             });
         }
         // check password
-        if(MATKHAU.length < 6){
-            return res.json({
-                message: 'MATKHAU must be required at least 6 characters'
-            });
-        }
         if(!HOTEN){
             return res.json({
                 message: 'HOTEN is NOT NULL'
@@ -76,59 +66,45 @@ module.exports = {
                 message: 'DIACHI is NOT NULL'
             });
         }
-
-        //update DangNhap
-        let sql = 'UPDATE DANGNHAP SET ? WHERE TAIKHOAN = ?';
-        db.query(sql, [data, tk], (err, response) => {
-            if (err) throw err
-        })
         //update KhachHang
-        sql = 'UPDATE KHACHHANG SET ? WHERE TAIKHOAN = ?';
-        db.query(sql, [data1, tk], (err, response) => {
+        let sql = 'UPDATE KHACHHANG SET ? WHERE MAKH = ?';
+        db.query(sql, [data, tk], (err, response) => {
             if (err) throw err
             res.json(data)
         })
     },
     store: (req, res) => {
         let data = {
-            TAIKHOAN: req.body.TAIKHOAN,
-            MATKHAU: req.body.MATKHAU,
-            MAQUYEN : 3,
+            MAKH: req.body.MAKH,
             HOTEN: req.body.HOTEN,
             SDT: req.body.SDT,
             MAIL: req.body.MAIL,
             DIACHI: req.body.DIACHI,
-             
+            TAIKHOAN: req.body.TAIKHOAN, 
         }
         // let data = req.body;
-        const TAIKHOAN = data.TAIKHOAN;
-        const MATKHAU = data.MATKHAU;
+        const MAKH = data.MAKH;
         const HOTEN = data.HOTEN;
         const DIACHI = data.DIACHI;
         const SDT = data.SDT;
         const MAIL = data.MAIL;
-        const MAQUYEN = data.MAQUYEN;
+        const TAIKHOAN = data.TAIKHOAN;
         let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
         
                 
         
         // check Username
-        if( TAIKHOAN.length < 6){
+        if( MAKH.length < 6){
             return res.json({
-                message: 'TAIKHOAN must be required at least 6 characters'
+                message: 'MAKH must be required at least 6 characters'
             });
         }
-        if(RegExp.test(TAIKHOAN)){
+        if(RegExp.test(MAKH)){
             return res.json({
-                message: 'Invalid TAIKHOAN! only accept alphabet, number and underscore'
+                message: 'Invalid MAKH! only accept alphabet, number and underscore'
             });
         }
-        // check password
-        if(MATKHAU.length < 6){
-            return res.json({
-                message: 'MATKHAU must be required at least 6 characters'
-            });
-        }
+
         if(!HOTEN){
             return res.json({
                 message: 'HOTEN is NOT NULL'
@@ -146,26 +122,15 @@ module.exports = {
         }
         // check done ^^
         try {
-            //insert table DANGNHAP
-            var sql = 'INSERT INTO DANGNHAP SET ?'
-            const DANGNHAP = {
-                TAIKHOAN: data.TAIKHOAN,
-                MATKHAU: bcrypt.hashSync(data.MATKHAU,10),
-                MAQUYEN: data.MAQUYEN
-            }
-            db.query(sql, [DANGNHAP], (err, response) => {
-                if (err) throw err
-                 //res.json({message: 'Insert DANGNHAP success!'});
-            })
-
             //insert table KHACHHANG
-            sql = 'INSERT INTO KHACHHANG SET ?';
+            let sql = 'INSERT INTO KHACHHANG SET ?';
             const KHACHHANG = {
-                TAIKHOAN: data.TAIKHOAN,
+                MAKH: data.MAKH,
                 HOTEN: data.HOTEN,
                 SDT: data.SDT,
                 MAIL: data.MAIL,
-                DIACHI: data.DIACHI
+                DIACHI: data.DIACHI,
+                TAIKHOAN: data.TAIKHOAN
             }
             db.query(sql, [KHACHHANG], (err, response) => {
                 if (err) throw err
@@ -178,7 +143,7 @@ module.exports = {
                 
     },
     delete: (req, res) => {
-        let sql = 'DELETE FROM KHACHHANG WHERE TAIKHOAN = ?'
+        let sql = 'DELETE FROM KHACHHANG WHERE MAKH = ?'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json({message: 'Delete success!'})

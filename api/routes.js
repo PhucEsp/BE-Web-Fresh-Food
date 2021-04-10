@@ -52,18 +52,18 @@ module.exports = function(app) {
 
     //Đăng nhập
   app.route('/dangnhap')
-    .get(dangnhap.get)//trả về tất cả các dòng trong table dangnhap
-    .post(dangnhap.store)//
+    .get(dangnhap.get)//ok
+    .post(dangnhap.store)//OK
   
   app.route('/dangnhap/:id')
-    .get(dangnhap.detail)
-    .put(dangnhap.update)
-    .delete(dangnhap.delete);
+    .get(dangnhap.detail)//OK
+    .put(dangnhap.update)//OK
+    .delete(dangnhap.delete);//OK
   
   app.route('/dangnhap/khachhang')
-    .post(dangnhap.loginKH);
+    .post(dangnhap.loginKH);//OK
   app.route('/dangnhap/nhanvien')
-    .post(dangnhap.loginNV);
+    .post(dangnhap.loginNV);//OK
   
     //Đánh Giá
   app.route('/danhgia')
@@ -111,24 +111,24 @@ module.exports = function(app) {
 
     //Khách hàng
   app.route('/khachhang')
-  .get(khachhang.get)
-  .post(khachhang.store);
+  .get(khachhang.get) //OK
+  .post(khachhang.store); //OK
 
   app.route('/khachhang/:id')
-  .get(khachhang.detail)
-  .put(khachhang.update)
-  .delete(khachhang.delete);
+  .get(khachhang.detail) //OK
+  .put(khachhang.update) // OK
+  .delete(khachhang.delete); //OK
 
 
     //Nhân Viên
-  app.route('/nhanvien')
-    .get(nhanvien.get)
-    .post(nhanvien.store);
+  app.route('/nhanvien') 
+    .get(nhanvien.get) //OK
+    .post(nhanvien.store); //OK
 
   app.route('/nhanvien/:id')
-    .get(nhanvien.detail)
-    .put(nhanvien.update)
-    .delete(nhanvien.delete);
+    .get(nhanvien.detail) //OK
+    .put(nhanvien.update) //OK
+    .delete(nhanvien.delete);//OOK
 
   
     //Quyền
