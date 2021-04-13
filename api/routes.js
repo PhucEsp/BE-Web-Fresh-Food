@@ -50,7 +50,7 @@ module.exports = function(app) {
     .delete(ctdh.delete);
 
 
-    //Đăng nhập
+    //Đăng nhập đã OK
   app.route('/dangnhap')
     .get(dangnhap.get)//ok
     .post(dangnhap.store)//OK
