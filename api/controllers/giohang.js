@@ -20,21 +20,64 @@ module.exports = {
             res.json(response[0])
         })
     },
+    detailkh: (req, res) => {
+        let sql = 'SELECT * FROM GIOHANG WHERE MAKH = ?'
+        db.query(sql, [req.params.id], (err, response) => {
+            if (err) throw err
+            res.json(response)
+        })
+    },
     update: (req, res) => {
         let data = req.body;
-        let productId = req.params.productId;
+        let MASP = data.MASP;
+        let MAKH = data.MAKH;
+        let SOLUONG = data.SOLUONG;
+        if(!MASP){
+            return res.json({
+                message: 'Mã Sản Phẩm không được rỗng'
+            });
+        }
+        if(!MAKH){
+            return res.json({
+                message: 'Mã Khách Hàng không được rỗng'
+            });
+        }
+        if(SOLUONG===0){
+            return res.json({
+                message: 'Số lượng phải lớn hơn 0'
+            });
+        }
         let sql = 'UPDATE GIOHANG SET ? WHERE ID = ?'
-        db.query(sql, [data, id], (err, response) => {
+        db.query(sql, [data,req.params.id], (err, response) => {
             if (err) throw err
-            res.json({message: 'Update success!'})
+            res.json(data)
         })
     },
     store: (req, res) => {
         let data = req.body;
+        let MASP = data.MASP;
+        let MAKH = data.MAKH;
+        let SOLUONG = data.SOLUONG;
+        if(!MASP){
+            return res.json({
+                message: 'Mã Sản Phẩm không được rỗng'
+            });
+        }
+        if(!MAKH){
+            return res.json({
+                message: 'Mã Khách Hàng không được rỗng'
+            });
+        }
+        if(SOLUONG===0){
+            return res.json({
+                message: 'Số lượng phải lớn hơn 0'
+            });
+        }
+        
         let sql = 'INSERT INTO GIOHANG SET ?'
         db.query(sql, [data], (err, response) => {
             if (err) throw err
-            res.json({message: 'Insert success!'})
+            res.json(data)
         })
     },
     delete: (req, res) => {

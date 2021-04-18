@@ -20,28 +20,73 @@ module.exports = {
             res.json(response[0])
         })
     },
+    detailsp: (req, res) => {
+        let sql = 'SELECT * FROM BINHLUAN WHERE MASP = ?'
+        db.query(sql, [req.params.id], (err, response) => {
+            if (err) throw err
+            res.json(response)
+        })
+    },
     update: (req, res) => {
         let data = req.body;
-        let productId = req.params.productId;
+        let MASP = data.MASP;
+        let MAKH = data.MAKH;
+        let NOIDUNG = data.NOIDUNG;
+        
+        if(!MASP){
+            return res.json({
+                message: 'Mã Sản Phẩm không được rỗng'
+            });
+        }
+        if(!MAKH){
+            return res.json({
+                message: 'Mã Khách hàng không được rỗng'
+            });
+        }
+        if(!NOIDUNG){
+            return res.json({
+                message: 'Nội Dung không được rỗng'
+            });
+        }
         let sql = 'UPDATE BINHLUAN SET ? WHERE ID = ?'
-        db.query(sql, [data, id], (err, response) => {
+        db.query(sql, [data, req.params.id], (err, response) => {
             if (err) throw err
-            res.json({message: 'Update success!'})
+            res.json(data)
         })
     },
     store: (req, res) => {
         let data = req.body;
+        let MASP = data.MASP;
+        let MAKH = data.MAKH;
+        let NOIDUNG = data.NOIDUNG;
+        
+        if(!MASP){
+            return res.json({
+                message: 'Mã Sản Phẩm không được rỗng'
+            });
+        }
+        if(!MAKH){
+            return res.json({
+                message: 'Mã Khách hàng không được rỗng'
+            });
+        }
+        if(!NOIDUNG){
+            return res.json({
+                message: 'Nội Dung không được rỗng'
+            });
+        }
+
         let sql = 'INSERT INTO BINHLUAN SET ?'
         db.query(sql, [data], (err, response) => {
             if (err) throw err
-            res.json({message: 'Insert success!'})
+            res.json(data)
         })
     },
     delete: (req, res) => {
         let sql = 'DELETE FROM BINHLUAN WHERE ID = ?'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
-            res.json({message: 'Delete success!'})
+            res.json({message: 'Xoá thành công'})
         })
     }
 }

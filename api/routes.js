@@ -19,14 +19,15 @@ module.exports = function(app) {
 
     //Bình luận
   app.route('/binhluan')
-    .get(binhluan.get)
-    .post(binhluan.store);
+    .get(binhluan.get)//OK
+    .post(binhluan.store);//OK
 
   app.route('/binhluan/:id')
-    .get(binhluan.detail)
-    .put(binhluan.update)
-    .delete(binhluan.delete);
-  
+    .get(binhluan.detail)//OK
+    .put(binhluan.update)//OK
+    .delete(binhluan.delete);//OK
+  app.route('/binhluan/sanpham/:id')
+    .get(binhluan.detailsp) //tất cả bình luận của 1 sản phẩm //OK
   
     //Blog
   app.route('/blog')
@@ -52,7 +53,7 @@ module.exports = function(app) {
 
     //Đăng nhập đã OK
   app.route('/dangnhap')
-    .get(dangnhap.get)//ok
+    .get(dangnhap.get)//OK
     .post(dangnhap.store)//OK
   
   app.route('/dangnhap/:id')
@@ -67,47 +68,54 @@ module.exports = function(app) {
   
     //Đánh Giá
   app.route('/danhgia')
-    .get(danhgia.get)
-    .post(danhgia.store);
+    .get(danhgia.get)//OK
+    .post(danhgia.store);//OK
 
   app.route('/danhgia/:id')
-    .get(danhgia.detail)
-    .put(danhgia.update)
-    .delete(danhgia.delete);
-
+    .get(danhgia.detail)//OK
+    .put(danhgia.update)//OK
+    .delete(danhgia.delete);//OK
+  app.route('/danhgia/sanpham/:id')
+    .get(danhgia.detailsp)//tất cả đánh giá của 1 sản phẩm //OK
     
     //Danh Mục
   app.route('/danhmuc')
-    .get(danhmuc.get)
-    .post(danhmuc.store);
+    .get(danhmuc.get) // tất cả danh mục //OK
+    .post(danhmuc.store); // tạo danh mục mới //OK
 
   app.route('/danhmuc/:id')
-    .get(danhmuc.detail)
-    .put(danhmuc.update)
-    .delete(danhmuc.delete);
+    .get(danhmuc.detail)//chi tiết danh mục // OK
+    .put(danhmuc.update) //OK
+    .delete(danhmuc.delete);//OK
+  app.route('/danhmuc/sanpham/:id')
+    .get(danhmuc.detailsp)// tất cả sản phẩm của 1 danh mục //OK
 
 
     //Đặt Hàng
   app.route('/dathang')
-  .get(dathang.get)
-  .post(dathang.store);
+    .get(dathang.get)//OK
+    .post(dathang.store);//OK
 
   app.route('/dathang/:id')
-  .get(dathang.detail)
-  .put(dathang.update)
-  .delete(dathang.delete);
-
+    .get(dathang.detail)//OK
+    .put(dathang.update)//OK
+    .delete(dathang.delete);//OK
+  app.route('/dathang/khachhang/:id')
+    .get(dathang.detailkh)//tất cả đặt hàng của 1 khách hàng
+  app.route('/dathang/khachhang')
+    .post(dathang.order)
 
     //Giỏ hàng
   app.route('/giohang')
-  .get(giohang.get)
-  .post(giohang.store);
+    .get(giohang.get)//OK
+    .post(giohang.store);
 
   app.route('/giohang/:id')
-  .get(giohang.detail)
-  .put(giohang.update)
-  .delete(giohang.delete);
-
+    .get(giohang.detail)
+    .put(giohang.update)
+    .delete(giohang.delete);
+  app.route('/giohang/khachhang/:id')
+    .get(giohang.detailkh)//giỏ hàng của 1 khách hàng
 
     //Khách hàng
   app.route('/khachhang')
