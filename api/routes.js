@@ -103,7 +103,9 @@ module.exports = function(app) {
   app.route('/dathang/khachhang/:id')
     .get(dathang.detailkh)//tất cả đặt hàng của 1 khách hàng
   app.route('/dathang/khachhang')
-    .post(dathang.order)
+    .post(dathang.order)//đặt hàng(đổ hết những sp trong giỏ hàng của 1 khách hàng vào ctdh của kh đó)
+  app.route('/dathang/xacnhan')
+    .post(dathang.comform)
 
     //Giỏ hàng
   app.route('/giohang')
