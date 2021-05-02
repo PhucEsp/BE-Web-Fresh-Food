@@ -160,5 +160,6 @@ module.exports = function(app) {
     .get(sanpham.detail)
     .put(sanpham.update)
     .delete(sanpham.delete);
-
+  app.route('/sanpham/random10/:id')
+    .get(sanpham.random10)
 };
