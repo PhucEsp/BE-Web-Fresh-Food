@@ -128,7 +128,8 @@ module.exports = function(app) {
   .get(khachhang.detail) //OK
   .put(khachhang.update) // OK
   .delete(khachhang.delete); //OK
-
+  app.route('/khachhangDN')
+  .post(khachhang.storeDN); //OK thêm khách hàng: thêm Đăng nhập trước khi thêm KH
 
     //Nhân Viên
   app.route('/nhanvien') 
