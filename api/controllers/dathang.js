@@ -56,22 +56,23 @@ module.exports = {
     },
     comform: (req, res) => {
         let ID = req.body.ID;
-        let sql = 'UPDATE DATHANG SET TRANGTHAI = 1 WHERE ID = ?'
-        db.query(sql, [ID], (err, response) => {
+        let MANV = req.body.MANV;
+        let sql = 'UPDATE DATHANG SET TRANGTHAI = 1,MANV=? WHERE ID = ?'
+        db.query(sql, [MANV,ID], (err, response) => {
             if (err) throw err
             res.json(ID)
         })
     },
     store: (req, res) => {
         let data = req.body;
-        let MANV = data.MANV;
+        //let MANV = data.MANV;
         let MAKH = data.MAKH;
         let DIACHI = data.DIACHI;
-        if(!MANV){
-            return res.json({
-                message: 'Mã Nhân Viên không được rỗng'
-            });
-        }
+        // if(!MANV){
+        //     return res.json({
+        //         message: 'Mã Nhân Viên không được rỗng'
+        //     });
+        // }
         if(!MAKH){
             return res.json({
                 message: 'Mã Khách Hàng không được rỗng'
@@ -91,7 +92,7 @@ module.exports = {
     },
     order: (req, res) => {
         var data ={
-            MANV : req.body.MANV,
+            //MANV : req.body.MANV,
             MAKH : req.body.MAKH
         }
         var dathang={
@@ -122,7 +123,7 @@ module.exports = {
                 db.query(sql, [data.MAKH], (err, response1) => {
                     if (err) throw err
                     dathang.MAKH = data.MAKH
-                    dathang.MANV = data.MANV
+                    dathang.MANV = null
                     dathang.TONGTIEN = null
                     dathang.THOIGIAN = new Date()
                     dathang.DIACHI = response1[0].DIACHI
