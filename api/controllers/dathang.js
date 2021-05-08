@@ -217,6 +217,19 @@ module.exports = {
             }
         })
     },
+    cancel:(req, res) => {
+        let MADH = req.body.ID
+        var sql = 'DELETE FROM CTDH WHERE MADH = ?'
+        db.query(sql, [MADH], (err, response) => {
+            if (err) throw err
+        })
+        sql = 'UPDATE DATHANG SET TRANGTHAI = 5 WHERE ID = ?'
+        db.query(sql, [MADH], (err, response1) => {
+            if (err) throw err
+            res.json({message: 'Cancel success!'})
+        })
+
+    },
     delete: (req, res) => {
         let sql = 'DELETE FROM DATHANG WHERE ID = ?'
         db.query(sql, [req.params.id], (err, response) => {
