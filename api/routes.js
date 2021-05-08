@@ -105,7 +105,7 @@ module.exports = function(app) {
   app.route('/dathang/khachhang')
     .post(dathang.order)//đặt hàng(đổ hết những sp trong giỏ hàng của 1 khách hàng vào ctdh của kh đó) gửi lên server MAKH
   app.route('/dathang/xacnhan')
-    .post(dathang.comform) // xác nhận đơn hàng, chuyển trạng thái đơn hàng từ 0 -> 1, đồng thời gán mã nhân viên đang đăng nhập xác nhận đơn hàng này vào đặt hàng. 
+    .post(dathang.comform) // xác nhận đơn hàng, chuyển trạng thái đơn hàng từ chưa xác nhận-> xác nhận, đồng thời gán mã nhân viên đang đăng nhập xác nhận đơn hàng này vào đặt hàng. 
 
     //Giỏ hàng
   app.route('/giohang')
