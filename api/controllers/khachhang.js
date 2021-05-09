@@ -75,7 +75,7 @@ module.exports = {
     },
     store: (req, res) => {
         let data = {
-            MAKH: req.body.MAKH,
+            //MAKH: req.body.MAKH,
             HOTEN: req.body.HOTEN,
             SDT: req.body.SDT,
             MAIL: req.body.MAIL,
@@ -83,7 +83,7 @@ module.exports = {
             TAIKHOAN: req.body.TAIKHOAN, 
         }
         // let data = req.body;
-        const MAKH = data.MAKH;
+        //const MAKH = data.MAKH;
         const HOTEN = data.HOTEN;
         const DIACHI = data.DIACHI;
         const SDT = data.SDT;
@@ -94,16 +94,16 @@ module.exports = {
                 
         
         // check Username
-        if( MAKH.length < 6){
-            return res.json({
-                message: 'MAKH must be required at least 6 characters'
-            });
-        }
-        if(RegExp.test(MAKH)){
-            return res.json({
-                message: 'Invalid MAKH! only accept alphabet, number and underscore'
-            });
-        }
+        // if( MAKH.length < 6){
+        //     return res.json({
+        //         message: 'MAKH must be required at least 6 characters'
+        //     });
+        // }
+        // if(RegExp.test(MAKH)){
+        //     return res.json({
+        //         message: 'Invalid MAKH! only accept alphabet, number and underscore'
+        //     });
+        // }
 
         if(!HOTEN){
             return res.json({
@@ -125,7 +125,7 @@ module.exports = {
             //insert table KHACHHANG
             let sql = 'INSERT INTO KHACHHANG SET ?';
             const KHACHHANG = {
-                MAKH: data.MAKH,
+                //MAKH: data.MAKH,
                 HOTEN: data.HOTEN,
                 SDT: data.SDT,
                 MAIL: data.MAIL,

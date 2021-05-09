@@ -22,9 +22,8 @@ module.exports = {
     },
     update: (req, res) => {
         let data = req.body;
-        let productId = req.params.productId;
         let sql = 'UPDATE CTDH SET ? WHERE ID = ?'
-        db.query(sql, [data, id], (err, response) => {
+        db.query(sql, [data, req.params.id], (err, response) => {
             if (err) throw err
             res.json({message: 'Update success!'})
         })

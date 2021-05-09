@@ -92,9 +92,8 @@ module.exports = {
             MATKHAU: bcrypt.hashSync(req.body.MATKHAU,10),
             MAQUYEN: req.body.MAQUYEN
         }
-        let tk = req.params.id;
         let sql = 'UPDATE DANGNHAP SET ? WHERE TAIKHOAN = ?'
-        db.query(sql, [data, tk], (err, response) => {
+        db.query(sql, [data, req.params.id], (err, response) => {
             if (err) throw err
             res.json(data)
         })

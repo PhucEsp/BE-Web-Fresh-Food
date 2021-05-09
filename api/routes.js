@@ -142,7 +142,8 @@ module.exports = function(app) {
     .get(nhanvien.detail) //OK
     .put(nhanvien.update) //OK
     .delete(nhanvien.delete);//OOK
-
+    app.route('/nhanvienDN')
+    .post(nhanvien.storeDN); //OK thêm nhân viên: thêm Đăng nhập trước khi thêm NV
   
     //Quyền
   app.route('/quyen')

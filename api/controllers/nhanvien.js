@@ -109,6 +109,89 @@ module.exports = {
 
                 
     },
+    storeDN: (req, res) => {
+        let data = {
+            TAIKHOAN: req.body.TAIKHOAN,
+            MATKHAU: req.body.MATKHAU,
+            MAQUYEN : 2,
+            HOTEN: req.body.HOTEN,
+            DIACHI: req.body.DIACHI,
+
+        }
+        // let data = req.body;
+        const TAIKHOAN = data.TAIKHOAN;
+        const MATKHAU = data.MATKHAU;
+        const HOTEN = data.HOTEN;
+        const DIACHI = data.DIACHI;
+        const MAQUYEN = data.MAQUYEN;
+        let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+
+
+        // check Username
+        if( TAIKHOAN.length < 6){
+            return res.json({
+                message: 'TAIKHOAN must be required at least 6 characters'
+            });
+        }
+        if(RegExp.test(TAIKHOAN)){
+            return res.json({
+                message: 'Invalid TAIKHOAN! only accept alphabet, number and underscore'
+            });
+        }
+        // check password
+        if(MATKHAU.length < 6){
+            return res.json({
+                message: 'MATKHAU must be required at least 6 characters'
+            });
+        }
+        if(!HOTEN){
+            return res.json({
+                message: 'HOTEN is NOT NULL'
+            });
+        }
+        if(!SDT){
+            return res.json({
+                message: 'SDT is NOT NULL'
+            });
+        }
+        if(!DIACHI){
+            return res.json({
+                message: 'DIACHI is NOT NULL'
+            });
+        }
+        // check done ^^
+        try {
+            //insert table DANGNHAP
+            var sql = 'INSERT INTO DANGNHAP SET ?'
+            const DANGNHAP = {
+                TAIKHOAN: data.TAIKHOAN,
+                MATKHAU: bcrypt.hashSync(data.MATKHAU,10),
+                MAQUYEN: data.MAQUYEN
+            }
+            db.query(sql, [DANGNHAP], (err, response) => {
+                if (err) throw err
+                 //res.json({message: 'Insert DANGNHAP success!'});
+            })
+
+            //insert table NHANVIEN
+            sql = 'INSERT INTO NHANVIEN SET ?';
+            const NHANVIEN = {
+                TAIKHOAN: data.TAIKHOAN,
+                HOTEN: data.HOTEN,
+                DIACHI: data.DIACHI
+            }
+            db.query(sql, [NHANVIEN], (err, response) => {
+                if (err) throw err
+                res.json({message: 'Insert NHANVIEN success!'});
+                return;
+            })
+        } catch (error) {
+            error.message;
+        }
+
+
+    },
     delete: (req, res) => {
         let sql = 'DELETE FROM NHANVIEN WHERE MANV = ?'
         db.query(sql, [req.params.id], (err, response) => {
