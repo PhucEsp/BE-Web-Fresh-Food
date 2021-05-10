@@ -130,7 +130,6 @@ module.exports = {
                 dathang.MANV = null
                 dathang.TONGTIEN = null
                 dathang.THOIGIAN = new Date()
-                dathang.DIACHI = 
                 dathang.TRANGTHAI = 0 ;
                 dathang.HOTEN = data.HOTEN
                 dathang.SDT = data.SDT
@@ -163,7 +162,7 @@ module.exports = {
                     sql = 'SELECT MAX(ID) AS MAX FROM Fruit.DATHANG;'
                         db.query(sql, [], (err, response3) => {
                             if (err) throw err
-                            var maxid = response3[0].MAX +1
+                            var maxid = response3[0].MAX
                             var tongtien =0
                             sql = 'SELECT * FROM Fruit.SANPHAM WHERE ID = ? ;'
                             response.forEach(element => {
