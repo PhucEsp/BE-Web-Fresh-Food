@@ -92,8 +92,11 @@ module.exports = {
     },
     order: (req, res) => {
         var data ={
-            //MANV : req.body.MANV,
-            MAKH : req.body.MAKH
+            MAKH : req.body.MAKH,
+            HOTEN : req.body.HOTEN,
+            SDT: req.body.SDT,
+            MAIL: req.body.MAIL,
+            DIACHI: req.body.DIACHI
         }
         var dathang={
             MAKH : null,
@@ -101,7 +104,10 @@ module.exports = {
             TONGTIEN: null,
             THOIGIAN : null,
             DIACHI : null,
-            TRANGTHAI : null
+            TRANGTHAI : null,
+            HOTEN : null,
+            SDT: null,
+            MAIL: null
         }
         var ctdh ={
             ID : null,
@@ -119,15 +125,27 @@ module.exports = {
             //check điều kiện để đảm bảo trong giỏ hàng của khách hàng có sản phẩm
             if(response){
                 // lấy thông tin địa chỉ cho bảng đặt hàng từ bảng khách hàng
-                sql = 'SELECT * FROM KHACHHANG WHERE MAKH = ?'
-                db.query(sql, [data.MAKH], (err, response1) => {
-                    if (err) throw err
-                    dathang.MAKH = data.MAKH
-                    dathang.MANV = null
-                    dathang.TONGTIEN = null
-                    dathang.THOIGIAN = new Date()
-                    dathang.DIACHI = response1[0].DIACHI
-                    dathang.TRANGTHAI = 0 ;
+
+                dathang.MAKH = data.MAKH
+                dathang.MANV = null
+                dathang.TONGTIEN = null
+                dathang.THOIGIAN = new Date()
+                dathang.DIACHI = 
+                dathang.TRANGTHAI = 0 ;
+                dathang.HOTEN = data.HOTEN
+                dathang.SDT = data.SDT
+                dathang.MAIL = data.MAIL
+                dathang.DIACHI = data.DIACHI
+
+                // sql = 'SELECT * FROM KHACHHANG WHERE MAKH = ?'
+                // db.query(sql, [data.MAKH], (err, response1) => {
+                //     if (err) throw err
+                //     dathang.MAKH = data.MAKH
+                //     dathang.MANV = null
+                //     dathang.TONGTIEN = null
+                //     dathang.THOIGIAN = new Date()
+                //     dathang.DIACHI = 
+                //     dathang.TRANGTHAI = 0 ;
                     //Tạo bảng Đặt hàng để chứa các CTDH
                     // callback function()
                     // sql = 'INSERT INTO DATHANG SET ?'
@@ -138,7 +156,7 @@ module.exports = {
                     }
                     f1();
                     
-                })
+                //})
                 //lấy Mã Đặt hàng vừa tạo để tạo CTDH
                 //sql = 'SELECT * FROM Fruit.DATHANG WHERE ID = ( SELECT MAX(ID) FROM Fruit.DATHANG where MAKH = 1 AND MANV = 1) ;'
                 function f2(){
