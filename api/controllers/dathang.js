@@ -123,9 +123,8 @@ module.exports = {
         db.query(sql, [data.MAKH], (err, response) => {
             if (err) throw err
             //check điều kiện để đảm bảo trong giỏ hàng của khách hàng có sản phẩm
-            if(response){
+            if(response[0]!=undefined){
                 // lấy thông tin địa chỉ cho bảng đặt hàng từ bảng khách hàng
-
                 dathang.MAKH = data.MAKH
                 dathang.MANV = null
                 dathang.TONGTIEN = null
@@ -136,93 +135,43 @@ module.exports = {
                 dathang.MAIL = data.MAIL
                 dathang.DIACHI = data.DIACHI
 
-                // sql = 'SELECT * FROM KHACHHANG WHERE MAKH = ?'
-                // db.query(sql, [data.MAKH], (err, response1) => {
-                //     if (err) throw err
-                //     dathang.MAKH = data.MAKH
-                //     dathang.MANV = null
-                //     dathang.TONGTIEN = null
-                //     dathang.THOIGIAN = new Date()
-                //     dathang.DIACHI = 
-                //     dathang.TRANGTHAI = 0 ;
-                    //Tạo bảng Đặt hàng để chứa các CTDH
-                    // callback function()
-                    // sql = 'INSERT INTO DATHANG SET ?'
-                    // db.query(sql, [dathang])
-                    function f1(){
-                        sql = 'INSERT INTO DATHANG SET ?'
-                        db.query(sql, [dathang])
-                    }
-                    f1();
+                sql = 'INSERT INTO DATHANG SET ?'
+                db.query(sql, [dathang])
                     
                 //})
                 //lấy Mã Đặt hàng vừa tạo để tạo CTDH
                 //sql = 'SELECT * FROM Fruit.DATHANG WHERE ID = ( SELECT MAX(ID) FROM Fruit.DATHANG where MAKH = 1 AND MANV = 1) ;'
-                function f2(){
-                    sql = 'SELECT MAX(ID) AS MAX FROM Fruit.DATHANG;'
-                        db.query(sql, [], (err, response3) => {
+                sql = 'SELECT MAX(ID) AS MAX FROM Fruit.DATHANG;'
+                db.query(sql, [], (err, response3) => {
+                    if (err) throw err
+                    var maxid = response3[0].MAX
+                    var tongtien =0
+                    sql = 'SELECT * FROM Fruit.SANPHAM WHERE ID = ? ;'
+                    response.forEach(element => {
+                        db.query(sql, [element.MASP], (err, response4) => {
                             if (err) throw err
-                            var maxid = response3[0].MAX
-                            var tongtien =0
-                            sql = 'SELECT * FROM Fruit.SANPHAM WHERE ID = ? ;'
-                            response.forEach(element => {
-                                db.query(sql, [element.MASP], (err, response4) => {
-                                    if (err) throw err
-                                    ctdh.ID = null
-                                    ctdh.MADH = maxid
-                                    ctdh.MASP = element.MASP
-                                    ctdh.GIA = response4[0].GIA
-                                    ctdh.SOLUONG = element.SOLUONG
-                                    tongtien = tongtien + (response4[0].GIA*element.SOLUONG)
-                                    //thêm từng ctdh
-                                    sql = 'INSERT INTO CTDH SET ?'
-                                    db.query(sql, [ctdh], (err, response5) => {
-                                        if (err) throw err
-                                    })
-                                    //cập nhật lại tổng tiền 
-                                    sql = 'UPDATE Fruit.DATHANG SET TONGTIEN = ? WHERE ID = ?'
-                                    db.query(sql, [tongtien,maxid], (err, response6) => {
-                                        if (err) throw err
-        
-                                    })
-                                })
-                                
-                            });
+                            ctdh.ID = null
+                            ctdh.MADH = maxid
+                            ctdh.MASP = element.MASP
+                            ctdh.GIA = response4[0].GIA
+                            ctdh.SOLUONG = element.SOLUONG
+                            tongtien = tongtien + (response4[0].GIA*element.SOLUONG)
+                            //thêm từng ctdh
+                            sql = 'INSERT INTO CTDH SET ?'
+                            db.query(sql, [ctdh], (err, response5) => {
+                                if (err) throw err
+                            })
+                            //cập nhật lại tổng tiền 
+                            sql = 'UPDATE Fruit.DATHANG SET TONGTIEN = ? WHERE ID = ?'
+                            db.query(sql, [tongtien,maxid], (err, response6) => {
+                                if (err) throw err
+
+                            })
                         })
-                    }
-                f2();
-                // sql = 'SELECT MAX(ID) AS MAX FROM Fruit.DATHANG;'
-                // db.query(sql, [], (err, response3) => {
-                //     if (err) throw err
-                //     var maxid = response3[0].MAX + 1
-                //     var tongtien =0
-                //     sql = 'SELECT * FROM Fruit.SANPHAM WHERE ID = ? ;'
-                //     response.forEach(element => {
-                //         db.query(sql, [element.MASP], (err, response4) => {
-                //             if (err) throw err
-                //             ctdh.ID = null
-                //             ctdh.MADH = maxid
-                //             ctdh.MASP = element.MASP
-                //             ctdh.GIA = response4[0].GIA
-                //             ctdh.SOLUONG = element.SOLUONG
-                //             tongtien = tongtien + (response4[0].GIA*element.SOLUONG)
-                //             //thêm từng ctdh
-                //             sql = 'INSERT INTO CTDH SET ?'
-                //             db.query(sql, [ctdh], (err, response5) => {
-                //                 if (err) throw err
-                //             })
-                //             //cập nhật lại tổng tiền 
-                //             sql = 'UPDATE Fruit.DATHANG SET TONGTIEN = ? WHERE ID = ?'
-                //             db.query(sql, [tongtien,maxid], (err, response6) => {
-                //                 if (err) throw err
-
-                //             })
-                //         })
                         
-                //     });
-
-                    
-                // })
+                    });
+                })
+                
                 sql = 'DELETE FROM GIOHANG WHERE MAKH = ?'
                 db.query(sql, [data.MAKH], (err, response7) => {
                     if (err) throw err
