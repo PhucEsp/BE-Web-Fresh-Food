@@ -8,13 +8,12 @@ const { throws } = require('assert')
 
 module.exports = {
     get: (req, res) => {
-        let sql = 'SELECT * FROM DANGNHAP'
+        let sql = 'SELECT TAIKHOAN FROM DANGNHAP'
         db.query(sql, (err, response) => {
             if (err) throw err
             res.json(response)
         })
     },
-    
     detail: (req, res) => {
         let sql = 'SELECT * FROM DANGNHAP WHERE TAIKHOAN = ?'
         db.query(sql, [req.params.id], (err, response) => {
@@ -31,21 +30,21 @@ module.exports = {
                 if(DANGNHAP){
                     const validPass = bcrypt.compareSync(req.body.MATKHAU, DANGNHAP.MATKHAU)
                     if(validPass){
-                        if(DANGNHAP.MAQUYEN>2){
-                            res.json(DANGNHAP);
+                        if(DANGNHAP.MAQUYEN == 3){
+                            res.json("Valid");
                         }
                         else{
-                            res.json({message: 'Deny access'});
+                            res.json('Access Deny');
                             return false;
                         }
                     }
                     else{
-                        res.json({message: 'Wrong Password'});
+                        res.json('Wrong Password');
                         return false;
                     }
                 }
                 else{
-                    res.json({message: 'ID not found'});
+                    res.json('User not found');
                     return false;
                 }
             })
@@ -63,21 +62,54 @@ module.exports = {
                 if(DANGNHAP){
                     const validPass = bcrypt.compareSync(data.MATKHAU, DANGNHAP.MATKHAU)
                     if(validPass){
-                        if(DANGNHAP.MAQUYEN<3){
-                            res.json(DANGNHAP);
+                        if(DANGNHAP.MAQUYEN == 2){
+                            res.json("Valid");
                         }
                         else{
-                            res.json({message: 'Deny access'});
+                            res.json('Access Deny');
                             return false;
                         }
                     }
                     else{
-                        res.json({message: 'Wrong Password'});
+                        res.json('Wrong Password');
                         return false;
                     }
                 }
                 else{
-                    res.json({message: 'ID not found'});
+                    res.json('User not found');
+                    return false;
+                }
+            })
+        }
+        catch(err){
+            res.status(400).send('Connect to Server FAILED');
+        }
+    },
+
+    loginAdmin:(req,res)=>{
+        try{
+            let data = req.body;
+            let sql =' SELECT * FROM DANGNHAP WHERE TAIKHOAN=?';
+            db.query(sql,[data.TAIKHOAN],(err,response)=>{
+                let DANGNHAP = response[0];
+                if(DANGNHAP){
+                    const validPass = bcrypt.compareSync(data.MATKHAU, DANGNHAP.MATKHAU)
+                    if(validPass){
+                        if(DANGNHAP.MAQUYEN == 1){
+                            res.json("Valid");
+                        }
+                        else{
+                            res.json('Access Deny');
+                            return false;
+                        }
+                    }
+                    else{
+                        res.json('Wrong Password');
+                        return false;
+                    }
+                }
+                else{
+                    res.json('User not found');
                     return false;
                 }
             })
@@ -109,7 +141,7 @@ module.exports = {
         const TAIKHOAN = data.TAIKHOAN;
         const MATKHAU = data.MATKHAU;
         let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;      
-        let sql = 'INSERT INTO DANGNHAP SET ?'
+        
         
         if( TAIKHOAN.length < 6){
             res.json({
@@ -128,6 +160,7 @@ module.exports = {
         }
         // check done ^^
         try {
+            let sql = 'INSERT INTO DANGNHAP SET ?'
             const DANGNHAP = {
                 TAIKHOAN: data.TAIKHOAN,
                 MATKHAU: bcrypt.hashSync(data.MATKHAU,10),
@@ -140,6 +173,7 @@ module.exports = {
         } catch (error) {
             res.json(error.message);
         }
+
     },
     delete: (req, res) => {
         let sql = 'DELETE FROM DANGNHAP WHERE TAIKHOAN = ?'

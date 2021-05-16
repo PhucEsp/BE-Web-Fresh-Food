@@ -13,6 +13,14 @@ module.exports = {
             res.json(response)
         })
     },
+    getCartProducts: (req, res) => {
+        const makh = req.body.MAKH;
+        let sql = `SELECT giohang.ID, giohang.MAKH, giohang.MASP, sanpham.TENSP, sanpham.DONVITINH, giohang.SOLUONG, sanpham.GIA, sanpham.HINHANH FROM sanpham JOIN giohang ON (giohang.MAKH = ? AND giohang.MASP = sanpham.ID )`
+        db.query(sql,[req.params.id], (err, response) => {
+            if (err) throw err
+            res.json(response)
+        })
+    },
     detail: (req, res) => {
         let sql = 'SELECT * FROM GIOHANG WHERE ID = ?'
         db.query(sql, [req.params.id], (err, response) => {
@@ -50,14 +58,16 @@ module.exports = {
         let sql = 'UPDATE GIOHANG SET ? WHERE ID = ?'
         db.query(sql, [data,req.params.id], (err, response) => {
             if (err) throw err
-            res.json(data)
+            res.json('update success')
         })
     },
     store: (req, res) => {
+
         let data = req.body;
         let MASP = data.MASP;
         let MAKH = data.MAKH;
         let SOLUONG = data.SOLUONG;
+        
         if(!MASP){
             return res.json({
                 message: 'Mã Sản Phẩm không được rỗng'
@@ -74,11 +84,31 @@ module.exports = {
             });
         }
         
-        let sql = 'INSERT INTO GIOHANG SET ?'
-        db.query(sql, [data], (err, response) => {
+        let sql_1=  `SELECT * FROM giohang WHERE MAKH = ${MAKH} AND MASP = ${MASP}`
+        
+        db.query(sql_1,[MAKH,MASP],(err,response)=>{ 
             if (err) throw err
-            res.json(data)
+            const check = response;
+            if(Object.keys(response).length) {
+                const newData = {
+                    ...data, 
+                    SOLUONG: parseInt(SOLUONG, 10)  +  parseInt(check[0].SOLUONG, 10) ,
+                }
+                let sql = 'UPDATE GIOHANG SET ? WHERE ID = ?'
+                db.query(sql, [newData,check[0].ID], (err, response) => {
+                    if (err) throw err
+                    res.json('update success')
+                })
+            }
+            else {
+                let sql = 'INSERT INTO GIOHANG SET ?'
+                db.query(sql, [data], (err, response) => {
+                    if (err) throw err
+                    res.json(data)
+                })
+            }
         })
+       
     },
     delete: (req, res) => {
         let sql = 'DELETE FROM GIOHANG WHERE ID = ?'

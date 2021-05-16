@@ -14,6 +14,21 @@ module.exports = {
             res.json(response)
         })
     },
+    getNV: (req, res) => {
+        let sql = 'SELECT * FROM NHANVIEN, DANGNHAP WHERE NHANVIEN.TAIKHOAN = DANGNHAP.TAIKHOAN AND DANGNHAP.MAQUYEN = 2'
+        db.query(sql, (err, response) => {
+            if (err) throw err
+            res.json(response)
+        })
+    },
+    getAdmin: (req, res) => {
+        let sql = 'SELECT * FROM NHANVIEN, DANGNHAP WHERE NHANVIEN.TAIKHOAN = DANGNHAP.TAIKHOAN AND DANGNHAP.MAQUYEN = 1'
+        db.query(sql, (err, response) => {
+            if (err) throw err
+            res.json(response)
+        })
+    },
+
     detail: (req, res) => {
         let sql = 'SELECT * FROM NHANVIEN WHERE MANV = ?'
         db.query(sql, [req.params.id], (err, response) => {
@@ -78,17 +93,17 @@ module.exports = {
         
                 
         
-        // check Username
-        if( MANV.length < 6){
-            return res.json({
-                message: 'MANV must be required at least 6 characters'
-            });
-        }
-        if(RegExp.test(MANV)){
-            return res.json({
-                message: 'Invalid MANV! only accept alphabet, number and underscore'
-            });
-        }
+        // // check Username
+        // if( MANV.length < 6){
+        //     return res.json({
+        //         message: 'MANV must be required at least 6 characters'
+        //     });
+        // }
+        // if(RegExp.test(MANV)){
+        //     return res.json({
+        //         message: 'Invalid MANV! only accept alphabet, number and underscore'
+        //     });
+        // }
  
         if(!HOTEN){
             return res.json({

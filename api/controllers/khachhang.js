@@ -15,7 +15,7 @@ module.exports = {
         })
     },
     detail: (req, res) => {
-        let sql = 'SELECT * FROM KHACHHANG WHERE MAKH = ?'
+        let sql = 'SELECT * FROM KHACHHANG WHERE TAIKHOAN = ?'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json(response[0])
@@ -137,10 +137,95 @@ module.exports = {
                 res.json(data);
             })
         } catch (error) {
-            error.message;
+            res.json(error.message);
         }
 
                 
+    },
+
+    // create an account  + a user
+    create: async (req, res) => {
+       
+        // insert to DANGNHAP an account
+        let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;      
+        let sql = 'INSERT INTO DANGNHAP SET ?'
+
+        if( req.body.TAIKHOAN < 6){
+            res.json({
+                message: 'TAIKHOAN must be required at least 6 characters'
+            });
+        }
+        if(RegExp.test(req.body.TAIKHOAN)){
+            res.json({
+                message: 'Invalid TAIKHOAN! only accept alphabet, number and underscore'
+            });
+        }
+        // check password
+        if(req.body.MATKHAU.length < 6){
+            res.json({message:'MATKHAU must be required at least 6 characters'
+        });
+        }
+        // check done ^^
+        try {
+            const DANGNHAP = {
+                TAIKHOAN: req.body.TAIKHOAN,
+                MATKHAU: bcrypt.hashSync(req.body.MATKHAU,10),
+                MAQUYEN: 3,
+            }
+            await db.query(sql, [DANGNHAP], (err, response) => {
+                if (err) throw err
+                return;
+            })
+        } catch (error) {
+            return res.json(error.message);
+        }
+
+        // insert to KHACHHANG
+        // check Username
+        let data = {
+            MAKH: req.body.MAKH,
+            HOTEN: req.body.HOTEN,
+            SDT: req.body.SDT,
+            MAIL: req.body.MAIL,
+            DIACHI: req.body.DIACHI,
+            TAIKHOAN: req.body.TAIKHOAN, 
+        }
+
+        if(!req.body.HOTEN){
+            return res.json({
+                message: 'HOTEN is NOT NULL'
+            });
+        }
+        if(!req.body.SDT){
+            return res.json({
+                message: 'SDT is NOT NULL'
+            });
+        }
+        if(!req.body.DIACHI){
+            return res.json({
+                message: 'DIACHI is NOT NULL'
+            });
+        }
+        // check done ^^
+        try {
+            //insert table KHACHHANG
+            let sql = 'INSERT INTO KHACHHANG SET ?';
+             const KHACHHANG = {
+                MAKH: data.MAKH,
+                HOTEN: data.HOTEN,
+                SDT: data.SDT,
+                MAIL: data.MAIL,
+                DIACHI: data.DIACHI,
+                TAIKHOAN: data.TAIKHOAN
+            }
+            await db.query(sql, [KHACHHANG], (err, response) => {
+                if (err) throw err
+                res.json("Insert Success");
+            })
+        } catch (error) {
+            res.json(error.message);
+        }
+
     },
     delete: (req, res) => {
         let sql = 'DELETE FROM KHACHHANG WHERE MAKH = ?'

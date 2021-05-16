@@ -65,7 +65,8 @@ module.exports = function(app) {
     .post(dangnhap.loginKH);//OK
   app.route('/dangnhap/nhanvien')
     .post(dangnhap.loginNV);//OK
-  
+  app.route('/dangnhap/admin')
+    .post(dangnhap.loginAdmin);//OK
     //Đánh Giá
   app.route('/danhgia')
     .get(danhgia.get)//OK
@@ -100,8 +101,10 @@ module.exports = function(app) {
     .get(dathang.detail)//OK
     .put(dathang.update)//OK
     .delete(dathang.delete);//OK
+
   app.route('/dathang/khachhang/:id')
     .get(dathang.detailkh)//tất cả đặt hàng của 1 khách hàng
+    
   app.route('/dathang/khachhang')
     .post(dathang.order)
 
@@ -116,11 +119,15 @@ module.exports = function(app) {
     .delete(giohang.delete);
   app.route('/giohang/khachhang/:id')
     .get(giohang.detailkh)//giỏ hàng của 1 khách hàng
+  app.route('/giohang/khachhang/sanpham/:id')
+    .get(giohang.getCartProducts)
 
     //Khách hàng
   app.route('/khachhang')
   .get(khachhang.get) //OK
   .post(khachhang.store); //OK
+  app.route('/taikhoan/khachhang')
+  .post(khachhang.create);
 
   app.route('/khachhang/:id')
   .get(khachhang.detail) //OK
@@ -138,6 +145,11 @@ module.exports = function(app) {
     .put(nhanvien.update) //OK
     .delete(nhanvien.delete);//OOK
 
+  app.route('/taikhoan/admin')
+    .get(nhanvien.getAdmin)
+  app.route('/taikhoan/nhanvien')
+    .get(nhanvien.getNV)
+
   
     //Quyền
   app.route('/quyen')
@@ -149,7 +161,7 @@ module.exports = function(app) {
   .put(quyen.update)
   .delete(quyen.delete);
 
-    //Sản phẩm
+    //Sản phẩmd
   app.route('/sanpham')
     .get(sanpham.get)
     .post(sanpham.store);
@@ -158,5 +170,8 @@ module.exports = function(app) {
     .get(sanpham.detail)
     .put(sanpham.update)
     .delete(sanpham.delete);
+
+  app.route('/sanpham/random10/:id')
+    .get(sanpham.random10)
 
 };
