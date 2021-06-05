@@ -49,6 +49,8 @@ module.exports = function(app) {
     .get(ctdh.detail)
     .put(ctdh.update)
     .delete(ctdh.delete);
+  app.route('/dathang/ctdh/:id')
+    .get(ctdh.detailCTDH)
 
 
     //Đăng nhập đã OK
@@ -104,10 +106,16 @@ module.exports = function(app) {
 
   app.route('/dathang/khachhang/:id')
     .get(dathang.detailkh)//tất cả đặt hàng của 1 khách hàng
+  app.route('/thongkedoanhthu/:id')
+    .get(dathang.getStatistical)//tất cả đặt hàng của 1 khách hàng
     
   app.route('/dathang/khachhang')
-    .post(dathang.order)
-
+    .post(dathang.order)//đặt hàng(đổ hết những sp trong giỏ hàng của 1 khách hàng vào ctdh của kh đó) gửi lên server MAKH
+  app.route('/dathang/xacnhan')
+    .post(dathang.comform) // xác nhận đơn hàng, chuyển trạng thái đơn hàng từ chưa xác nhận-> xác nhận, đồng thời gán mã nhân viên đang đăng nhập xác nhận đơn hàng này vào đặt hàng. 
+    app.route('/dathang/huy')
+    .post(dathang.cancel) // 
+    
     //Giỏ hàng
   app.route('/giohang')
     .get(giohang.get)//OK
@@ -133,7 +141,8 @@ module.exports = function(app) {
   .get(khachhang.detail) //OK
   .put(khachhang.update) // OK
   .delete(khachhang.delete); //OK
-
+  app.route('/khachhangDN')
+  .post(khachhang.storeDN); //OK thêm khách hàng: thêm Đăng nhập trước khi thêm KH
 
     //Nhân Viên
   app.route('/nhanvien') 
@@ -150,7 +159,9 @@ module.exports = function(app) {
   app.route('/taikhoan/nhanvien')
     .get(nhanvien.getNV)
 
-  
+    app.route('/nhanvienDN')
+    .post(nhanvien.storeDN); //OK thêm nhân viên: thêm Đăng nhập trước khi thêm NV
+
     //Quyền
   app.route('/quyen')
   .get(quyen.get)
@@ -174,4 +185,6 @@ module.exports = function(app) {
   app.route('/sanpham/random10/:id')
     .get(sanpham.random10)
 
+  app.route('/sanpham/random10/:id')
+    .get(sanpham.random10)
 };

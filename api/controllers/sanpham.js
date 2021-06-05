@@ -27,6 +27,13 @@ module.exports = {
             res.json(response[0])
         })
     },
+    random10:(req, res) => {
+        let sql = 'SELECT * FROM SANPHAM WHERE MADM = ? order by RAND() LIMIT 10;'
+        db.query(sql,[req.params.id] , (err, response) => {
+            if (err) throw err
+            res.json(response)
+        })
+    },
     update: (req, res) => {
         let data = req.body;
         let sql = 'UPDATE SANPHAM SET ? WHERE ID = ?'

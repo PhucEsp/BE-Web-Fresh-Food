@@ -22,9 +22,8 @@ module.exports = {
     },
     update: (req, res) => {
         let data = req.body;
-        let productId = req.params.productId;
         let sql = 'UPDATE CTDH SET ? WHERE ID = ?'
-        db.query(sql, [data, id], (err, response) => {
+        db.query(sql, [data, req.params.id], (err, response) => {
             if (err) throw err
             res.json({message: 'Update success!'})
         })
@@ -43,5 +42,12 @@ module.exports = {
             if (err) throw err
             res.json({message: 'Delete success!'})
         })
-    }
+    },
+    detailCTDH: (req, res) => {
+        let sql = 'select  sanpham.TENSP, sanpham.HINHANH, ctdh.GIA, ctdh.SOLUONG from ctdh , sanpham WHERE ctdh.MASP = sanpham.ID AND ctdh.MADH = ? '
+        db.query(sql, [req.params.id], (err, response) => {
+            if (err) throw err
+            res.json(response)
+        })
+    },
 }

@@ -95,21 +95,34 @@ module.exports = {
                 if(DANGNHAP){
                     const validPass = bcrypt.compareSync(data.MATKHAU, DANGNHAP.MATKHAU)
                     if(validPass){
-                        if(DANGNHAP.MAQUYEN == 1){
-                            res.json("Valid");
+                        if(DANGNHAP.MAQUYEN == 1 || DANGNHAP.MAQUYEN == 2){
+                            const respone = {
+                                message: 'Valid',
+                                role: DANGNHAP.MAQUYEN
+                            }
+                            res.json(respone);
                         }
                         else{
-                            res.json('Access Deny');
+                            const respone = {
+                                message: 'Access Deny'
+                            }
+                            res.json(respone);
                             return false;
                         }
                     }
                     else{
-                        res.json('Wrong Password');
+                        const respone = {
+                            message: 'Wrong Password'
+                        }
+                        res.json(respone);
                         return false;
                     }
                 }
                 else{
-                    res.json('User not found');
+                    const respone = {
+                        message: 'User not found',
+                    }
+                    res.json(respone);
                     return false;
                 }
             })
@@ -124,9 +137,8 @@ module.exports = {
             MATKHAU: bcrypt.hashSync(req.body.MATKHAU,10),
             MAQUYEN: req.body.MAQUYEN
         }
-        let tk = req.params.id;
         let sql = 'UPDATE DANGNHAP SET ? WHERE TAIKHOAN = ?'
-        db.query(sql, [data, tk], (err, response) => {
+        db.query(sql, [data, req.params.id], (err, response) => {
             if (err) throw err
             res.json(data)
         })
