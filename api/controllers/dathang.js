@@ -15,7 +15,7 @@ module.exports = {
         })
     },
     getStatistical: (req, res) => {
-        let sql = 'SELECT CONVERT(MONTH(THOIGIAN),char) as Thang,format(SUM(TONGTIEN),0) as DoanhThu FROM dathang WHERE YEAR(THOIGIAN) = 2021 GROUP BY Thang'
+        let sql = 'SELECT CONVERT(MONTH(THOIGIAN),char) as Thang,CONVERT(SUM(TONGTIEN),int) as DoanhThu FROM dathang WHERE YEAR(THOIGIAN) = 2021 GROUP BY Thang'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json(response)

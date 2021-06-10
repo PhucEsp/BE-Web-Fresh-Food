@@ -96,11 +96,18 @@ module.exports = {
                     const validPass = bcrypt.compareSync(data.MATKHAU, DANGNHAP.MATKHAU)
                     if(validPass){
                         if(DANGNHAP.MAQUYEN == 1 || DANGNHAP.MAQUYEN == 2){
-                            const respone = {
-                                message: 'Valid',
-                                role: DANGNHAP.MAQUYEN
-                            }
-                            res.json(respone);
+                            let sql =' SELECT * FROM NHANVIEN WHERE TAIKHOAN=?';
+                            let MANV = null
+                            db.query(sql,[data.TAIKHOAN],(err,response)=>{
+                                MANV = response[0].MANV;
+                                const respone = {
+                                    message: 'Valid',
+                                    role: DANGNHAP.MAQUYEN,
+                                    MANV: MANV
+                                }
+                                res.json(respone);
+                            })
+                            
                         }
                         else{
                             const respone = {
