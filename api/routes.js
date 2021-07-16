@@ -80,7 +80,8 @@ module.exports = function(app) {
     .delete(danhgia.delete);//OK
   app.route('/danhgia/sanpham/:id')
     .get(danhgia.detailsp)//tất cả đánh giá của 1 sản phẩm //OK
-    
+  app.route('/danhgia/kiemtra')
+    .post(danhgia.checkRated)
     //Danh Mục
   app.route('/danhmuc')
     .get(danhmuc.get) // tất cả danh mục //OK

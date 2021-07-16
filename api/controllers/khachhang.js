@@ -23,34 +23,16 @@ module.exports = {
     },
     update: (req, res) => {
         let data = {
-            MAKH: req.body.MAKH,
             HOTEN :req.body.HOTEN,
             SDT: req.body.SDT,
             MAIL :req.body.MAIL,
-            DIACHI :req.body.DIACHI,
-            TAIKHOAN: req.body.TAIKHOAN
+            DIACHI :req.body.DIACHI
         }
         let tk = req.params.id;
-
-        const MAKH = data.MAKH;
         const HOTEN = data.HOTEN;
         const DIACHI = data.DIACHI;
         const SDT = data.SDT;
-        const MAIL = data.MAIL;
-        const TAIKHOAN = data.TAIKHOAN;
-        let RegExp = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
-        // check Username
-        if( MAKH.length < 6){
-            return res.json({
-                message: 'MAKH must be required at least 6 characters'
-            });
-        }
-        if(RegExp.test(MAKH)){
-            return res.json({
-                message: 'Invalid MAKH! only accept alphabet, number and underscore'
-            });
-        }
-        // check password
+       
         if(!HOTEN){
             return res.json({
                 message: 'HOTEN is NOT NULL'

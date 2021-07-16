@@ -44,7 +44,7 @@ module.exports = {
         })
     },
     detailCTDH: (req, res) => {
-        let sql = 'select  sanpham.TENSP, sanpham.HINHANH, ctdh.GIA, ctdh.SOLUONG from ctdh , sanpham WHERE ctdh.MASP = sanpham.ID AND ctdh.MADH = ? '
+        let sql = 'SELECT  SANPHAM.TENSP, SANPHAM.HINHANH, CTDH.GIA, CTDH.SOLUONG from CTDH , SANPHAM WHERE CTDH.MASP = SANPHAM.ID AND CTDH.MADH = ? '
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json(response)

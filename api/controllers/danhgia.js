@@ -21,7 +21,7 @@ module.exports = {
         })
     },
     detailsp: (req, res) => {
-        let sql = 'SELECT COUNT(IF(SOSAO = 1,SOSAO, NULL)) AS oneStar,COUNT(IF(SOSAO = 2,SOSAO, NULL)) AS twoStar, COUNT(IF(SOSAO = 3,SOSAO, NULL)) AS threeStar,COUNT(IF(SOSAO = 4,SOSAO, NULL)) AS fourStar,COUNT(IF(SOSAO = 5,SOSAO, NULL)) AS fiveStar FROM danhgia WHERE MASP = ? GROUP BY MASP'
+        let sql = 'SELECT COUNT(IF(SOSAO = 1,SOSAO, NULL)) AS oneStar,COUNT(IF(SOSAO = 2,SOSAO, NULL)) AS twoStar, COUNT(IF(SOSAO = 3,SOSAO, NULL)) AS threeStar,COUNT(IF(SOSAO = 4,SOSAO, NULL)) AS fourStar,COUNT(IF(SOSAO = 5,SOSAO, NULL)) AS fiveStar FROM DANHGIA WHERE MASP = ? GROUP BY MASP'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json(response)
@@ -86,5 +86,17 @@ module.exports = {
             if (err) throw err
             res.json({message: 'Xoá thành công'})
         })
-    }
+    },
+    checkRated: (req, res) => {
+        let data = req.body;
+        let sql = 'SELECT * FROM DANHGIA WHERE MAKH = ? AND MASP = ?'
+        db.query(sql, [data.MAKH,data.MASP], (err, response) => {
+            if (err) throw err
+            // res.json(response[0])
+            let Rating = response[0];
+            if(Rating) {
+                res.json(true)
+            } else res.json(false)
+        })
+    },
 }

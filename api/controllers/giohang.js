@@ -15,7 +15,7 @@ module.exports = {
     },
     getCartProducts: (req, res) => {
         const makh = req.body.MAKH;
-        let sql = `SELECT giohang.ID, giohang.MAKH, giohang.MASP, sanpham.TENSP, sanpham.DONVITINH, giohang.SOLUONG, sanpham.GIA, sanpham.HINHANH FROM sanpham JOIN giohang ON (giohang.MAKH = ? AND giohang.MASP = sanpham.ID )`
+        let sql = `SELECT GIOHANG.ID, GIOHANG.MAKH, GIOHANG.MASP, SANPHAM.TENSP, SANPHAM.DONVITINH, GIOHANG.SOLUONG, SANPHAM.GIA, SANPHAM.HINHANH FROM SANPHAM JOIN GIOHANG ON (GIOHANG.MAKH = ? AND GIOHANG.MASP = SANPHAM.ID )`
         db.query(sql,[req.params.id], (err, response) => {
             if (err) throw err
             res.json(response)
@@ -84,7 +84,7 @@ module.exports = {
             });
         }
         
-        let sql_1=  `SELECT * FROM giohang WHERE MAKH = ${MAKH} AND MASP = ${MASP}`
+        let sql_1=  `SELECT * FROM GIOHANG WHERE MAKH = ${MAKH} AND MASP = ${MASP}`
         
         db.query(sql_1,[MAKH,MASP],(err,response)=>{ 
             if (err) throw err

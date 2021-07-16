@@ -21,7 +21,7 @@ module.exports = {
         })
     },
     detailsp: (req, res) => {
-        let sql = 'SELECT khachhang.HOTEN , binhluan.THOIGIAN , binhluan.NOIDUNG  FROM binhluan,khachhang  WHERE binhluan.MAKH = khachhang.MAKH AND binhluan.MASP = ?'
+        let sql = 'SELECT KHACHHANG.HOTEN , BINHLUAN.THOIGIAN , BINHLUAN.NOIDUNG  FROM BINHLUAN,KHACHHANG  WHERE BINHLUAN.MAKH = KHACHHANG.MAKH AND BINHLUAN.MASP = ?'
         let sql1 = 'SELECT * FROM BINHLUAN WHERE MASP = ?'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
