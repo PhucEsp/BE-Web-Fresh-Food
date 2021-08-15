@@ -28,6 +28,7 @@ module.exports = {
             res.json(response[0])
         })
     },
+    
     detailkh: (req, res) => {
         let sql = 'SELECT * FROM GIOHANG WHERE MAKH = ?'
         db.query(sql, [req.params.id], (err, response) => {

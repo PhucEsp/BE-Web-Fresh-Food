@@ -177,21 +177,41 @@ module.exports = {
             res.json({message:'MATKHAU must be required at least 6 characters'
         });
         }
-        // check done ^^
+        // check account existed
         try {
-            let sql = 'INSERT INTO DANGNHAP SET ?'
-            const DANGNHAP = {
-                TAIKHOAN: data.TAIKHOAN,
-                MATKHAU: bcrypt.hashSync(data.MATKHAU,10),
-                MAQUYEN: data.MAQUYEN
+            // let sql = 'SELECT TAIKHOAN FROM DANGNHAP'
+            // db.query(sql, (err, respone) => {
+            //     if (err) throw err
+            //     if(Object.keys(respone.length)) {
+            //         res.status(404).json({
+            //             message: "Tài khoản đã tồn tại"
+            //         })
+            //     }
+            //     else {
+                   
+            //     }
+            // })
+            try {
+                let sql = 'INSERT INTO DANGNHAP SET ?'
+                const DANGNHAP = {
+                    TAIKHOAN: data.TAIKHOAN,
+                    MATKHAU: bcrypt.hashSync(data.MATKHAU,10),
+                    MAQUYEN: data.MAQUYEN
+                }
+                db.query(sql, [DANGNHAP], (err, response) => {
+                    if (err) throw err
+                    res.json(DANGNHAP)
+                })
+            } catch (error) {
+                res.json(error.message);
             }
-            db.query(sql, [DANGNHAP], (err, response) => {
-                if (err) throw err
-                res.json(DANGNHAP)
-            })
-        } catch (error) {
-            res.json(error.message);
         }
+        catch (error) {
+            res.json({
+                message: error.message
+            })
+        }
+        
 
     },
     delete: (req, res) => {

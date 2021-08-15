@@ -7,14 +7,14 @@ const { throws } = require('assert')
 
 module.exports = {
     get: (req, res) => {
-        let sql = 'SELECT * FROM BLOG'
+        let sql = 'SELECT * FROM blog'
         db.query(sql, (err, response) => {
             if (err) throw err
             res.json(response)
         })
     },
     detail: (req, res) => {
-        let sql = 'SELECT * FROM BLOG WHERE ID = ?'
+        let sql = 'SELECT * FROM blog WHERE ID = ?'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json(response[0])
@@ -22,7 +22,7 @@ module.exports = {
     },
     update: (req, res) => {
         let data = req.body;
-        let sql = 'UPDATE BLOG SET ? WHERE ID = ?'
+        let sql = 'UPDATE blog SET ? WHERE ID = ?'
         db.query(sql, [data, req.params.id], (err, response) => {
             if (err) throw err
             res.json({message: 'Update success!'})
@@ -30,14 +30,14 @@ module.exports = {
     },
     store: (req, res) => {
         let data = req.body;
-        let sql = 'INSERT INTO BLOG SET ?'
+        let sql = 'INSERT INTO blog SET ?'
         db.query(sql, [data], (err, response) => {
             if (err) throw err
             res.json({message: 'Insert success!'})
         })
     },
     delete: (req, res) => {
-        let sql = 'DELETE FROM BLOG WHERE ID = ?'
+        let sql = 'DELETE FROM blog WHERE ID = ?'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json({message: 'Delete success!'})

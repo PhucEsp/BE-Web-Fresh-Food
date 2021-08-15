@@ -9,11 +9,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cors());
 
-app.use(function(req, res, next) {
+app.use(function(err,req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
-
+    res.status(err.status || 500).json(response.error(err.status || 500));
+    res.status(err.status || 204).json(response.error(err.status || 204));
     next();
 })
 
@@ -21,7 +22,7 @@ let routes = require('./api/routes') //importing route
 routes(app)
 
 app.use(function(req, res) {
-    res.status(404).send({url: req.originalUrl + ' not found'})
+    res.status(404).send({url: req.originalUrl + ' not found'});
 })
 
 app.listen(port)

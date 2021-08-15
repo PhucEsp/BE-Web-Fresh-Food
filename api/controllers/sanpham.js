@@ -44,11 +44,26 @@ module.exports = {
     },
     store: (req, res) => {
         let data = req.body;
-        let sql = 'INSERT INTO SANPHAM SET ?'
-        db.query(sql, [data], (err, response) => {
+
+        let sql_pk = 'SELECT * FROM SANPHAM WHERE TENSP = ?'
+        db.query(sql_pk, [data.TENSP], (err, response) => {
             if (err) throw err
-            res.json(data)
+            if (response.length) {
+                res.json({
+                    "message": "Tên sản phẩm đã tồn tại, Vui lòng chọn tên sản phẩm khác",
+                    "success": false
+                })
+            }
+            else {
+                let sql = 'INSERT INTO SANPHAM SET ?'
+                db.query(sql, [data], (err, response) => {
+                    if (err) throw err
+                    res.json(data)
+                })
+            }
         })
+
+        
     },
     delete: (req, res) => {
         let sql = 'DELETE FROM SANPHAM WHERE ID = ?'

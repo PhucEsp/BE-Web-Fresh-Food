@@ -8,14 +8,14 @@ const { response } = require('express')
 
 module.exports = {
     get: (req, res) => {
-        let sql = 'SELECT * FROM DATHANG ORDER BY TRANGTHAI'
+        let sql = 'SELECT * FROM DATHANG ORDER BY TRANGTHAI, THOIGIAN'
         db.query(sql, (err, response) => {
             if (err) throw err
             res.json(response)
         })
     },
     getStatistical: (req, res) => {
-        let sql = 'SELECT CONVERT(MONTH(THOIGIAN),char) as Thang,CONVERT(SUM(TONGTIEN),int) as DoanhThu FROM dathang WHERE YEAR(THOIGIAN) = 2021 GROUP BY Thang'
+        let sql = 'SELECT CONVERT(MONTH(THOIGIAN),char) as Thang,CONVERT(SUM(TONGTIEN),int) as DoanhThu FROM DATHANG WHERE YEAR(THOIGIAN) = 2021 GROUP BY Thang'
         db.query(sql, [req.params.id], (err, response) => {
             if (err) throw err
             res.json(response)
@@ -43,7 +43,7 @@ module.exports = {
             res.json(data)
         })
     },
-    comform: (req, res) => {
+    confirm: (req, res) => {
         let ID = req.body.ID;
         let MANV = req.body.MANV;
         let sql = 'UPDATE DATHANG SET TRANGTHAI = 1,MANV=? WHERE ID = ?'
@@ -95,16 +95,16 @@ module.exports = {
             MAIL: null
         }
         var ctdh ={
-            ID : null,
             MADH : null,
             MASP : null,
             GIA : null,
             SOLUONG : null
         }
+        // kiểm tra số lượng đặt hàng với số lượng tồn kho của sản phẩm
+        
+
         // lấy ra tất cả những sản phẩm trong giỏ hàng của 1 khách hàng
         var sql = 'SELECT * FROM GIOHANG WHERE MAKH = ?'
-        
-        
         db.query(sql, [data.MAKH], (err, response) => {
             if (err) throw err
             //check điều kiện để đảm bảo trong giỏ hàng của khách hàng có sản phẩm
@@ -119,41 +119,37 @@ module.exports = {
                 dathang.SDT = data.SDT
                 dathang.MAIL = data.MAIL
                 dathang.DIACHI = data.DIACHI
-                    function f1(){
-                        sql = 'INSERT INTO DATHANG SET ?'
-                        db.query(sql, [dathang])
-                    }
-                    f1();
+
+                function f1(){
+                    sql = 'INSERT INTO DATHANG SET ?'
+                    db.query(sql, [dathang])
+                }
+                f1();
                     
-                //})
-                //lấy Mã Đặt hàng vừa tạo để tạo CTDH
-                //sql = 'SELECT * FROM Fruit.DATHANG WHERE ID = ( SELECT MAX(ID) FROM Fruit.DATHANG where MAKH = 1 AND MANV = 1) ;'
                 function f2(){
-                    sql = 'SELECT MAX(ID) AS MAX FROM Fruit.DATHANG;'
+                    sql = 'SELECT MAX(ID) AS MAX FROM DATHANG;'
                         db.query(sql, [], (err, response3) => {
                             if (err) throw err
                             var maxid = response3[0].MAX
                             var tongtien =0
-                            sql = 'SELECT * FROM Fruit.SANPHAM WHERE ID = ? ;'
+                            sql = 'SELECT * FROM SANPHAM WHERE ID = ? ;'
                             response.forEach(element => {
                                 db.query(sql, [element.MASP], (err, response4) => {
                                     if (err) throw err
-                                    ctdh.ID = null
                                     ctdh.MADH = maxid
                                     ctdh.MASP = element.MASP
                                     ctdh.GIA = response4[0].GIA
                                     ctdh.SOLUONG = element.SOLUONG
                                     tongtien = tongtien + (response4[0].GIA*element.SOLUONG)
-                                    //thêm từng ctdh
-                                    sql = 'INSERT INTO CTDH SET ?'
-                                    db.query(sql, [ctdh], (err, response5) => {
+
+                                    let ctdh_sql = 'INSERT INTO CTDH SET ?'
+                                    db.query(ctdh_sql, [ctdh], (err, response) => {
                                         if (err) throw err
                                     })
                                     //cập nhật lại tổng tiền 
-                                    sql = 'UPDATE Fruit.DATHANG SET TONGTIEN = ? WHERE ID = ?'
+                                    sql = 'UPDATE DATHANG SET TONGTIEN = ? WHERE ID = ?'
                                     db.query(sql, [tongtien,maxid], (err, response6) => {
                                         if (err) throw err
-        
                                     })
                                 })
                                 

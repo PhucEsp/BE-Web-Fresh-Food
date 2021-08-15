@@ -115,7 +115,7 @@ module.exports = {
             MAQUYEN : 2,
             HOTEN: req.body.HOTEN,
             DIACHI: req.body.DIACHI,
-
+            SDT: req.body.SDT,
         }
         // let data = req.body;
         const TAIKHOAN = data.TAIKHOAN;
@@ -149,7 +149,7 @@ module.exports = {
                 message: 'HOTEN is NOT NULL'
             });
         }
-        if(!SDT){
+        if(!data.SDT){
             return res.json({
                 message: 'SDT is NOT NULL'
             });
@@ -161,30 +161,48 @@ module.exports = {
         }
         // check done ^^
         try {
-            //insert table DANGNHAP
-            var sql = 'INSERT INTO DANGNHAP SET ?'
-            const DANGNHAP = {
-                TAIKHOAN: data.TAIKHOAN,
-                MATKHAU: bcrypt.hashSync(data.MATKHAU,10),
-                MAQUYEN: data.MAQUYEN
-            }
-            db.query(sql, [DANGNHAP], (err, response) => {
-                if (err) throw err
-                 //res.json({message: 'Insert DANGNHAP success!'});
-            })
 
-            //insert table NHANVIEN
-            sql = 'INSERT INTO NHANVIEN SET ?';
-            const NHANVIEN = {
-                TAIKHOAN: data.TAIKHOAN,
-                HOTEN: data.HOTEN,
-                DIACHI: data.DIACHI
-            }
-            db.query(sql, [NHANVIEN], (err, response) => {
+            let sql_pk = `select * from DANGNHAP where TAIKHOAN = ?`
+            db.query(sql_pk, [data.TAIKHOAN], (err, response) => {
                 if (err) throw err
-                res.json({message: 'Insert NHANVIEN success!'});
-                return;
+                if(response.length) {
+                    let api_res = {
+                        "message": "Tài khoản đã tổn tại. Vui lòng chọn tài khoản khác",
+                        "success": false
+                    }
+                    res.json(api_res);
+                }
+                else {
+                    //insert table DANGNHAP
+                    var sql = 'INSERT INTO DANGNHAP SET ?'
+                    const DANGNHAP = {
+                        TAIKHOAN: data.TAIKHOAN,
+                        MATKHAU: bcrypt.hashSync(data.MATKHAU,10),
+                        MAQUYEN: data.MAQUYEN
+                    }
+                    db.query(sql, [DANGNHAP], (err, response) => {
+                        if (err) throw err
+                        //res.json({message: 'Insert DANGNHAP success!'});
+                    })
+
+                    //insert table NHANVIEN
+                    sql = 'INSERT INTO NHANVIEN SET ?';
+                    const NHANVIEN = {
+                        TAIKHOAN: data.TAIKHOAN,
+                        HOTEN: data.HOTEN,
+                        DIACHI: data.DIACHI
+                    }
+                    db.query(sql, [NHANVIEN], (err, response) => {
+                        if (err) throw err
+                        let api_res = {
+                            "message": "Tạo tài khoản cho nhân viên thành công",
+                            "success": false
+                        }
+                        res.json(api_res);
+                    })
+                }
             })
+            
         } catch (error) {
             error.message;
         }
