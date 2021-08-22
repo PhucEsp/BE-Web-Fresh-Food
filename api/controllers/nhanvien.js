@@ -196,7 +196,7 @@ module.exports = {
                         if (err) throw err
                         let api_res = {
                             "message": "Tạo tài khoản cho nhân viên thành công",
-                            "success": false
+                            "success": true
                         }
                         res.json(api_res);
                     })
